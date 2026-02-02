@@ -2,7 +2,6 @@
 
 Uma biblioteca de interface (UI) para Roblox minimalista, moderna e totalmente animada. Desenvolvida em Luau com foco em UX (Experiência do Usuário), contando com animações suaves (TweenService) e suporte a temas transparentes.
 
-
 ## ✨ Funcionalidades
 
 - **Design Premium:** Tema escuro com suporte a transparência (Glassmorphism).
@@ -21,48 +20,69 @@ Copie o código abaixo e cole no seu executor (Script):
 
 ```lua
 local Library = loadstring(game:HttpGet("SEU_LINK_RAW_AQUI"))()
+```
 
-> ⚠️ Nota: Lembre-se de substituir "SEU_LINK_RAW_AQUI" pelo link Raw do arquivo .lua do seu repositório GitHub.
-> 
-🚀 Documentação
-1. Criar Janela
+> ⚠️ **Nota:** Lembre-se de substituir `"SEU_LINK_RAW_AQUI"` pelo link **Raw** do arquivo `.lua` do seu repositório GitHub.
+
+## 🚀 Documentação
+
+### 1. Criar Janela
 A função principal para iniciar a UI.
+
+```lua
 local Window = Library:CreateWindow({
     Title = "Nome do Script",
     Color = Color3.fromRGB(0, 255, 140), -- Cor de destaque (Accent)
     MinimizeKey = Enum.KeyCode.RightControl, -- Tecla para minimizar a UI
     Transparent = true -- (Novo) Define se o fundo será semitransparente
 })
+```
 
-2. Notificações
+### 2. Notificações
 Envia um alerta animado no canto inferior direito da tela.
+
+```lua
 -- Título, Mensagem, Duração (segundos)
 Library:Notify("Sucesso", "Configuração carregada!", 3)
+```
 
-3. Abas (Tabs)
+### 3. Abas (Tabs)
 Cria uma nova aba na janela. O ícone é opcional.
+
+```lua
 -- Nome, Icon ID (rbxassetid://...) ou deixe vazio ""
 local Tab = Window:AddTab("Principal", "rbxassetid://123456789")
+```
 
-🛠 Componentes
-Label
+---
+
+## 🛠 Componentes
+
+### Label
 Texto simples para separar seções ou dar avisos.
+```lua
 Tab:AddLabel("Configurações de Combate")
+```
 
-Button
+### Button
 Botão clicável que executa uma função.
+```lua
 Tab:AddButton("Executar Script", function()
     print("Botão clicado!")
 end)
+```
 
-Toggle
+### Toggle
 Interruptor On/Off.
+```lua
 Tab:AddToggle("Auto Farm", {Default = false}, function(Value)
     print("Estado:", Value) -- Retorna true ou false
 end)
+```
 
-Slider
+### Slider
 Barra deslizante para selecionar números.
+```lua
 Tab:AddSlider("Velocidade", {
     Min = 16,
     Max = 100,
@@ -70,23 +90,30 @@ Tab:AddSlider("Velocidade", {
 }, function(Value)
     print("Valor:", Value)
 end)
+```
 
-TextBox (Novo)
+### TextBox (Novo)
 Caixa de entrada de texto.
+```lua
 Tab:AddTextBox("Mensagem de Spam", function(Text)
     print("Você digitou:", Text)
 end)
+```
 
-Color Picker (Novo)
+### Color Picker (Novo)
 Seletor de cores com sliders RGB.
+```lua
 Tab:AddColorPicker("Cor da ESP", Color3.fromRGB(255, 0, 0), function(Color)
     -- Retorna um Color3
     print(Color.R, Color.G, Color.B) 
 end)
+```
 
-Dropdown
+### Dropdown
 Lista de seleção. Suporta seleção única ou múltipla.
-Modo Único:
+
+**Modo Único:**
+```lua
 local Drop = Tab:AddDropdown("Selecione Arma", {
     Values = {"M4A1", "AK-47", "Sniper"},
     Default = "M4A1",
@@ -94,8 +121,10 @@ local Drop = Tab:AddDropdown("Selecione Arma", {
 }, function(Value)
     print("Selecionado:", Value)
 end)
+```
 
-Modo Múltiplo:
+**Modo Múltiplo:**
+```lua
 Tab:AddDropdown("Teleportes", {
     Values = {"Spawn", "Loja", "PvP"},
     Default = "",
@@ -106,13 +135,21 @@ Tab:AddDropdown("Teleportes", {
         if State then print(Option .. " está ativado") end
     end
 end)
+```
 
-Atualizar Lista (Refresh):
+**Atualizar Lista (Refresh):**
 Você pode atualizar os itens de um dropdown existente:
+```lua
 Drop:Refresh({"Nova Lista 1", "Nova Lista 2"})
+```
 
-📜 Exemplo Completo
+---
+
+## 📜 Exemplo Completo
+
 Aqui está um script de exemplo para testar todas as funções:
+
+```lua
 local Library = loadstring(game:HttpGet("SEU_LINK_RAW_AQUI"))()
 
 local Window = Library:CreateWindow({
@@ -138,13 +175,8 @@ end)
 Tab:AddTextBox("Digite algo", function(t)
     print(t)
 end)
+```
 
-📝 Créditos
-Desenvolvido por [Seu Nome].
+## 📝 Créditos
 
-### O que você precisa fazer agora:
-1.  Crie um arquivo chamado `README.md` no seu GitHub.
-2.  Cole o código acima.
-3.  **Importante:** Onde está escrito `SEU_LINK_RAW_AQUI`, o usuário final terá que colocar o link do seu script. Você pode já deixar o seu link fixo se quiser.
-4.  Onde tem o link da imagem (`https://via.placeholder.com...`), substitua pelo link de uma print (screenshot) real da sua UI funcionando no jogo. Isso atrai muito mais downloads/uso!
-
+Desenvolvido por **[66Six]**.
