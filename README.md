@@ -1,194 +1,179 @@
 # 🎨 Modern UI Library V2
 
-Uma biblioteca de interface (UI) para Roblox minimalista, moderna e totalmente animada. Agora conta com **Sistema de Configuração (Save/Load)** automático e **Barra de Pesquisa**.
+Uma biblioteca de interface (UI) para Roblox minimalista, moderna e totalmente animada. Desenvolvida em Luau com foco em UX (Experiência do Usuário), contando com animações suaves (TweenService) e suporte a temas transparentes.
 
 ## ✨ Funcionalidades
 
 - **Design Premium:** Tema escuro com suporte a transparência (Glassmorphism).
-- **SearchBar:** Barra de pesquisa integrada para filtrar funções automaticamente.
-- **Save/Load System:** Salva e carrega configurações automaticamente usando Flags.
-- **Animações Suaves:** Interações elásticas via TweenService.
+- **Animações Suaves:** Interações elásticas, fade-ins e transições de abas.
 - **Componentes Completos:**
-  - Abas, Botões, Toggles, Sliders.
-  - Dropdowns (Multi/Single), Color Pickers, TextBoxes.
+  - Abas com ícones e barra lateral animada.
+  - **Color Picker** (RGB) e **TextBox**.
+  - Dropdowns com Multi-Seleção e Refresh.
+  - Sliders, Toggles e Botões interativos.
 - **Sistema de Notificações:** Toast notifications integradas.
+- **Funcional:** Janela arrastável e minimizável (com tecla configurável).
 
 ## 📦 Instalação
 
 Copie o código abaixo e cole no seu executor (Script):
 
 ```lua
-local Library = loadstring(game:HttpGet("LINK_DO_SEU_RAW_AQUI"))()
+local Library = loadstring(game:HttpGet("SEU_LINK_RAW_AQUI"))()
 ```
 
-> ⚠️ **Nota:** Substitua `"LINK_DO_SEU_RAW_AQUI"` pelo link **Raw** do arquivo `.lua` que você subiu no seu repositório.
-
----
+> ⚠️ **Nota:** Lembre-se de substituir `"SEU_LINK_RAW_AQUI"` pelo link **Raw** do arquivo `.lua` do seu repositório GitHub.
 
 ## 🚀 Documentação
 
-### 1. Carregar Configuração (Opcional)
-Se você quiser que o script lembre as configurações ao iniciar, adicione esta linha **antes** de criar a janela. O sistema verificará se a pasta e o arquivo existem.
-
-```lua
--- Carrega a config "MinhaConfig" se ela existir
-Library.Flags = Library:SafeLoad("MinhaConfig") or {}
-```
-
-### 2. Criar Janela
+### 1. Criar Janela
 A função principal para iniciar a UI.
 
 ```lua
 local Window = Library:CreateWindow({
-    Title = "Hub Premium",
-    Color = Color3.fromRGB(0, 255, 140), -- Cor de destaque
-    MinimizeKey = Enum.KeyCode.RightControl, -- Tecla para minimizar
-    Transparent = true, -- (Opcional) Fundo Transparente
-    SearchBar = true    -- (Opcional) Ativa a barra de pesquisa no topo
+    Title = "Nome do Script",
+    Color = Color3.fromRGB(0, 255, 140), -- Cor de destaque (Accent)
+    MinimizeKey = Enum.KeyCode.RightControl, -- Tecla para minimizar a UI
+    Transparent = true -- (Novo) Define se o fundo será semitransparente
 })
 ```
 
-### 3. Notificações
-Envia um alerta no canto da tela.
+### 2. Notificações
+Envia um alerta animado no canto inferior direito da tela.
 
 ```lua
--- Título, Texto, Duração
-Library:Notify("Aviso", "Script carregado com sucesso!", 3)
+-- Título, Mensagem, Duração (segundos)
+Library:Notify("Sucesso", "Configuração carregada!", 3)
+```
+
+### 3. Abas (Tabs)
+Cria uma nova aba na janela. O ícone é opcional.
+
+```lua
+-- Nome, Icon ID (rbxassetid://...) ou deixe vazio ""
+local Tab = Window:AddTab("Principal", "rbxassetid://123456789")
 ```
 
 ---
 
-## 🛠 Componentes & Flags
+## 🛠 Componentes
 
-Para usar o sistema de **Save/Load**, você deve adicionar o parâmetro `Flag` nas configurações dos componentes. A Library usará esse ID para salvar ou carregar o valor.
-
-### Abas (Tabs)
+### Label
+Texto simples para separar seções ou dar avisos.
 ```lua
-local Tab = Window:AddTab("Principal", "rbxassetid://123456789")
+Tab:AddLabel("Configurações de Combate")
 ```
 
 ### Button
-Botões não salvam estado, servem apenas para executar ações.
+Botão clicável que executa uma função.
 ```lua
-Tab:AddButton("Clique Aqui", function()
-    print("Botão pressionado")
+Tab:AddButton("Executar Script", function()
+    print("Botão clicado!")
 end)
 ```
 
-### Toggle (Com Save)
+### Toggle
+Interruptor On/Off.
 ```lua
-Tab:AddToggle("Auto Farm", {
-    Default = false,
-    Flag = "AutoFarmKey" -- ID único para salvar
-}, function(Value)
-    print("Auto Farm está:", Value)
+Tab:AddToggle("Auto Farm", {Default = false}, function(Value)
+    print("Estado:", Value) -- Retorna true ou false
 end)
 ```
 
-### Slider (Com Save)
+### Slider
+Barra deslizante para selecionar números.
 ```lua
 Tab:AddSlider("Velocidade", {
     Min = 16,
     Max = 100,
-    Default = 16,
-    Flag = "WalkSpeedKey" -- ID único
+    Default = 16
 }, function(Value)
-    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+    print("Valor:", Value)
 end)
 ```
 
-### Dropdown (Com Save)
-Suporta seleção única ou múltipla.
-
+### TextBox (Novo)
+Caixa de entrada de texto.
 ```lua
-Tab:AddDropdown("Selecione a Arma", {
-    Values = {"Rifle", "Pistola", "Faca"},
-    Default = "Rifle",
-    Multi = false,
-    Flag = "WeaponSelector" -- ID único
+Tab:AddTextBox("Mensagem de Spam", function(Text)
+    print("Você digitou:", Text)
+end)
+```
+
+### Color Picker (Novo)
+Seletor de cores com sliders RGB.
+```lua
+Tab:AddColorPicker("Cor da ESP", Color3.fromRGB(255, 0, 0), function(Color)
+    -- Retorna um Color3
+    print(Color.R, Color.G, Color.B) 
+end)
+```
+
+### Dropdown
+Lista de seleção. Suporta seleção única ou múltipla.
+
+**Modo Único:**
+```lua
+local Drop = Tab:AddDropdown("Selecione Arma", {
+    Values = {"M4A1", "AK-47", "Sniper"},
+    Default = "M4A1",
+    Multi = false
 }, function(Value)
     print("Selecionado:", Value)
 end)
 ```
 
-### Color Picker (Com Save)
+**Modo Múltiplo:**
 ```lua
-Tab:AddColorPicker("Cor da ESP", Color3.fromRGB(255, 0, 0), {
-    Flag = "EspColor" -- ID único
-}, function(Color)
-    print(Color.R, Color.G, Color.B)
+Tab:AddDropdown("Teleportes", {
+    Values = {"Spawn", "Loja", "PvP"},
+    Default = "",
+    Multi = true
+}, function(Options)
+    -- Retorna uma tabela: {"Spawn" = true, "Loja" = false...}
+    for Option, State in pairs(Options) do
+        if State then print(Option .. " está ativado") end
+    end
 end)
 ```
 
-### TextBox (Com Save)
+**Atualizar Lista (Refresh):**
+Você pode atualizar os itens de um dropdown existente:
 ```lua
-Tab:AddTextBox("Mensagem de Spam", {
-    Flag = "SpamText"
-}, function(Text)
-    print("Texto salvo:", Text)
-end)
-```
-
----
-
-## 💾 Salvando Configurações
-
-Para que o usuário possa salvar as alterações feitas, você precisa criar um botão que chame a função `SafeSave`.
-
-```lua
-local SettingsTab = Window:AddTab("Configurações", "")
-
-SettingsTab:AddButton("Salvar Config", function()
-    Library:SafeSave("MinhaConfig") -- Cria o arquivo "MinhaConfig.json"
-    Library:Notify("Config", "Salvo com sucesso!", 2)
-end)
-
-SettingsTab:AddButton("Deletar Config", function()
-    delfile("MyDarkLib/MinhaConfig.json") -- Deleta o arquivo
-    Library:Notify("Config", "Configuração deletada.", 2)
-end)
+Drop:Refresh({"Nova Lista 1", "Nova Lista 2"})
 ```
 
 ---
 
-## 📜 Exemplo de Script Completo
+## 📜 Exemplo Completo
 
-Aqui está um exemplo funcional juntando tudo:
+Aqui está um script de exemplo para testar todas as funções:
 
 ```lua
-local Library = loadstring(game:HttpGet("LINK_DO_SEU_RAW_AQUI"))()
+local Library = loadstring(game:HttpGet("SEU_LINK_RAW_AQUI"))()
 
--- 1. Carrega configurações salvas (se existirem)
-Library.Flags = Library:SafeLoad("ConfigExample") or {}
-
--- 2. Cria a Janela
 local Window = Library:CreateWindow({
-    Title = "Script Hub V2",
-    Color = Color3.fromRGB(255, 170, 0),
-    Transparent = true,
-    SearchBar = true
+    Title = "Showcase UI",
+    Color = Color3.fromRGB(255, 120, 0),
+    Transparent = true
 })
 
--- 3. Cria Abas e Funções
-local Tab = Window:AddTab("Farm", "")
+Library:Notify("Bem-vindo", "UI Carregada com sucesso!", 5)
 
-Tab:AddToggle("Auto Farm", {Default = false, Flag = "FarmEnabled"}, function(v)
-    print("Farm:", v)
+local Tab = Window:AddTab("Main", "")
+
+Tab:AddLabel("Teste de Componentes")
+
+Tab:AddToggle("God Mode", {Default = false}, function(s)
+    print(s)
 end)
 
-Tab:AddSlider("Distância", {Min = 0, Max = 50, Default = 10, Flag = "FarmDist"}, function(v)
-    print("Dist:", v)
+Tab:AddColorPicker("Cor do Menu", Color3.new(1,1,1), function(c)
+    print(c)
 end)
 
--- 4. Aba de Configurações
-local ConfigTab = Window:AddTab("Sistema", "")
-
-ConfigTab:AddButton("Salvar Tudo", function()
-    Library:SafeSave("ConfigExample")
-    Library:Notify("Sistema", "Configuração Salva!", 3)
+Tab:AddTextBox("Digite algo", function(t)
+    print(t)
 end)
 ```
 
-## 📝 Créditos
-
-Desenvolvido por **[66six__]**.
