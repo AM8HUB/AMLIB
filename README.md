@@ -1,179 +1,177 @@
-# 🎨 Modern UI Library V2
+# 🎨 Am lib
 
-Uma biblioteca de interface (UI) para Roblox minimalista, moderna e totalmente animada. Desenvolvida em Luau com foco em UX (Experiência do Usuário), contando com animações suaves (TweenService) e suporte a temas transparentes.
+Uma biblioteca de interface gráfica (UI) moderna, minimalista e altamente configurável para scripts de Roblox (Luau). Possui suporte a temas escuros, animações suaves, **barra de pesquisa integrada** e sistema de notificações.
 
 ## ✨ Funcionalidades
 
-- **Design Premium:** Tema escuro com suporte a transparência (Glassmorphism).
-- **Animações Suaves:** Interações elásticas, fade-ins e transições de abas.
-- **Componentes Completos:**
-  - Abas com ícones e barra lateral animada.
-  - **Color Picker** (RGB) e **TextBox**.
-  - Dropdowns com Multi-Seleção e Refresh.
-  - Sliders, Toggles e Botões interativos.
-- **Sistema de Notificações:** Toast notifications integradas.
-- **Funcional:** Janela arrastável e minimizável (com tecla configurável).
+- **Design Clean:** Tema escuro agradável com cores de destaque personalizáveis.
+- **Search Bar:** Barra de pesquisa funcional que filtra e encontra elementos em qualquer aba.
+- **Componentes:** Suporte a Toggles, Sliders, Dropdowns (Multi/Single), Color Pickers e TextBoxes.
+- **Draggable:** Janela principal e botão de abrir flutuante móveis.
+- **Notificações:** Sistema de avisos toast embutido.
 
-## 📦 Instalação
+## 📦 Como Usar
 
-Copie o código abaixo e cole no seu executor (Script):
+### Inicialização
+Para carregar a library, utilize o `loadstring` (se estiver em um executor).
 
 ```lua
-local Library = loadstring(game:HttpGet("SEU_LINK_RAW_AQUI"))()
+local Library = loadstring(game:HttpGet("LINK PRIVADO"))()
 ```
 
-> ⚠️ **Nota:** Lembre-se de substituir `"SEU_LINK_RAW_AQUI"` pelo link **Raw** do arquivo `.lua` do seu repositório GitHub.
-
-## 🚀 Documentação
+## 🛠️ Documentação
 
 ### 1. Criar Janela
-A função principal para iniciar a UI.
+A janela principal é o container do seu hub.
 
 ```lua
 local Window = Library:CreateWindow({
-    Title = "Nome do Script",
-    Color = Color3.fromRGB(0, 255, 140), -- Cor de destaque (Accent)
-    MinimizeKey = Enum.KeyCode.RightControl, -- Tecla para minimizar a UI
-    Transparent = true -- (Novo) Define se o fundo será semitransparente
+    Title = "Hub Title",                  -- Nome da Janela
+    Color = Color3.fromRGB(0, 255, 140),  -- Cor de destaque (Accent)
+    MinimizeKey = Enum.KeyCode.RightControl, -- Tecla para minimizar
+    Transparent = true,                   -- Fundo transparente (true/false)
+    SearchBar = true                      -- Ativa a barra de busca (true/false)
 })
 ```
 
-### 2. Notificações
-Envia um alerta animado no canto inferior direito da tela.
+### 2. Criar Abas
+Organize seus scripts em categorias. Você pode usar IDs de imagem do Roblox para ícones.
 
 ```lua
--- Título, Mensagem, Duração (segundos)
-Library:Notify("Sucesso", "Configuração carregada!", 3)
-```
-
-### 3. Abas (Tabs)
-Cria uma nova aba na janela. O ícone é opcional.
-
-```lua
--- Nome, Icon ID (rbxassetid://...) ou deixe vazio ""
-local Tab = Window:AddTab("Principal", "rbxassetid://123456789")
+local MainTab = Window:AddTab("Principal", "6034509993")
+local VisualsTab = Window:AddTab("Visuais", "6031763426")
 ```
 
 ---
 
-## 🛠 Componentes
+### 🧩 Elementos da UI
 
-### Label
-Texto simples para separar seções ou dar avisos.
+#### Label (Texto)
+Adiciona um texto informativo. Retorna uma função `.Set()` para atualizar o texto depois.
 ```lua
-Tab:AddLabel("Configurações de Combate")
+local StatusLabel = MainTab:AddLabel("Status: Aguardando...")
+
+-- Atualizar texto:
+StatusLabel:Set("Status: Ativado!")
 ```
 
-### Button
-Botão clicável que executa uma função.
+#### Button (Botão)
+Executa uma ação ao ser clicado.
 ```lua
-Tab:AddButton("Executar Script", function()
-    print("Botão clicado!")
+MainTab:AddButton("Resetar Personagem", function()
+    game.Players.LocalPlayer.Character:BreakJoints()
 end)
 ```
 
-### Toggle
-Interruptor On/Off.
+#### Toggle (Interruptor)
+Botão de ON/OFF. Útil para loops.
 ```lua
-Tab:AddToggle("Auto Farm", {Default = false}, function(Value)
-    print("Estado:", Value) -- Retorna true ou false
-end)
-```
-
-### Slider
-Barra deslizante para selecionar números.
-```lua
-Tab:AddSlider("Velocidade", {
-    Min = 16,
-    Max = 100,
-    Default = 16
-}, function(Value)
-    print("Valor:", Value)
-end)
-```
-
-### TextBox (Novo)
-Caixa de entrada de texto.
-```lua
-Tab:AddTextBox("Mensagem de Spam", function(Text)
-    print("Você digitou:", Text)
-end)
-```
-
-### Color Picker (Novo)
-Seletor de cores com sliders RGB.
-```lua
-Tab:AddColorPicker("Cor da ESP", Color3.fromRGB(255, 0, 0), function(Color)
-    -- Retorna um Color3
-    print(Color.R, Color.G, Color.B) 
-end)
-```
-
-### Dropdown
-Lista de seleção. Suporta seleção única ou múltipla.
-
-**Modo Único:**
-```lua
-local Drop = Tab:AddDropdown("Selecione Arma", {
-    Values = {"M4A1", "AK-47", "Sniper"},
-    Default = "M4A1",
-    Multi = false
-}, function(Value)
-    print("Selecionado:", Value)
-end)
-```
-
-**Modo Múltiplo:**
-```lua
-Tab:AddDropdown("Teleportes", {
-    Values = {"Spawn", "Loja", "PvP"},
-    Default = "",
-    Multi = true
-}, function(Options)
-    -- Retorna uma tabela: {"Spawn" = true, "Loja" = false...}
-    for Option, State in pairs(Options) do
-        if State then print(Option .. " está ativado") end
+MainTab:AddToggle("Auto Farm", {Default = false}, function(State)
+    -- 'State' retorna true ou false
+    if State then
+        print("Farm ligado")
+    else
+        print("Farm desligado")
     end
 end)
 ```
 
-**Atualizar Lista (Refresh):**
-Você pode atualizar os itens de um dropdown existente:
+#### Slider (Barra Deslizante)
+Para selecionar números dentro de um intervalo.
 ```lua
-Drop:Refresh({"Nova Lista 1", "Nova Lista 2"})
+MainTab:AddSlider("Velocidade", {
+    Min = 16,
+    Max = 200,
+    Default = 16
+}, function(Value)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+end)
+```
+
+#### TextBox (Caixa de Texto)
+Campo para o usuário digitar. O callback é acionado quando o usuário tira o foco da caixa (Enter ou Clicar fora).
+```lua
+MainTab:AddTextBox("Nome do Alvo", function(Text)
+    print("Texto digitado: " .. Text)
+end)
+```
+
+#### Color Picker (Seletor de Cor)
+Permite escolher uma cor RGB.
+```lua
+VisualsTab:AddColorPicker("Cor da ESP", Color3.fromRGB(255, 255, 255), function(Color)
+    -- 'Color' é um Color3
+    print("Nova cor:", Color)
+end)
+```
+
+#### Dropdown (Lista de Seleção)
+Suporta seleção única ou múltipla.
+
+**Modo Único (Single):**
+```lua
+MainTab:AddDropdown("Escolha o Time", {
+    Values = {"Red", "Blue", "Green"},
+    Default = "Red",
+    Multi = false
+}, function(Value)
+    -- Retorna a string selecionada
+    print("Time:", Value)
+end)
+```
+
+**Modo Múltiplo (Multi):**
+```lua
+MainTab:AddDropdown("Selecionar Itens", {
+    Values = {"Espada", "Escudo", "Poção"},
+    Default = "",
+    Multi = true
+}, function(Table)
+    -- Retorna uma tabela: { ["Espada"] = true, ["Poção"] = false }
+    for item, ativo in pairs(Table) do
+        if ativo then print(item .. " selecionado") end
+    end
+end)
 ```
 
 ---
 
-## 📜 Exemplo Completo
-
-Aqui está um script de exemplo para testar todas as funções:
+### 🔔 Notificações
+Envia um alerta toast no canto da tela.
 
 ```lua
-local Library = loadstring(game:HttpGet("SEU_LINK_RAW_AQUI"))()
-
-local Window = Library:CreateWindow({
-    Title = "Showcase UI",
-    Color = Color3.fromRGB(255, 120, 0),
-    Transparent = true
-})
-
-Library:Notify("Bem-vindo", "UI Carregada com sucesso!", 5)
-
-local Tab = Window:AddTab("Main", "")
-
-Tab:AddLabel("Teste de Componentes")
-
-Tab:AddToggle("God Mode", {Default = false}, function(s)
-    print(s)
-end)
-
-Tab:AddColorPicker("Cor do Menu", Color3.new(1,1,1), function(c)
-    print(c)
-end)
-
-Tab:AddTextBox("Digite algo", function(t)
-    print(t)
-end)
+-- Library:Notify(Título, Texto, Duração)
+Library:Notify("Sucesso", "Configuração salva!", 5)
 ```
 
+## 📝 Exemplo Completo
+
+Aqui está um script completo pronto para teste:
+
+```lua
+local Library = require(script.Library) -- Ajuste o caminho
+
+local Window = Library:CreateWindow({
+    Title = "Super Hub v2",
+    Color = Color3.fromRGB(255, 170, 0),
+    MinimizeKey = Enum.KeyCode.LeftAlt,
+    SearchBar = true
+})
+
+local Tab1 = Window:AddTab("Jogados")
+local Tab2 = Window:AddTab("Config")
+
+Tab1:AddToggle("God Mode", {Default = false}, function(v)
+    print("God Mode:", v)
+end)
+
+Tab1:AddSlider("Pulo", {Min = 50, Max = 500}, function(v)
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = v
+end)
+
+Tab2:AddButton("Fechar UI", function()
+    game.CoreGui:FindFirstChild("MyDarkLib"):Destroy()
+end)
+
+Library:Notify("Bem-vindo", "Script carregado com sucesso!", 3)
+```
